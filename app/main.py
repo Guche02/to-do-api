@@ -1,24 +1,19 @@
 from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from .db import SessionLocal, engine
-from pydantic import BaseModel
-from . import crud,models, schemas
 
+from .schemas import user_schema
+
+from .models import models
+from .database.db import engine
+from pydantic import BaseModel
+from .services import user_servies
+from .routes.user_routes import router as user_router  
 app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
 
-#Dependency
-def get_db():
-    db = SessionLocal() 
-    try :    
-        yield db
-    finally:
-        db.close()
+@app.get("/")
+def root():
+   print("root route")
+   return {"message": "Hello World"}
 
-
-@app.post("/users/",response_model=schemas.User)
-def post_user(user:schemas.UserCreate, db:Session=Depends(get_db)):
-    db_user = crud.get_user_by_email(db, email=user.email)
-    if db_user:
-        raise HTTPException(status_code=400, detail="Email already registered")
-    return crud.create_user(db=db,user=user)
+app.include_router(user_router)

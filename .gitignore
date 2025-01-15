@@ -3,3 +3,5 @@
 
 # Ignore the env directory (if it exists)
 env/
+
+__pycache__/

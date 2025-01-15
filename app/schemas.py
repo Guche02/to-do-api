@@ -1,17 +1,13 @@
 from pydantic import BaseModel
 
 class TodoBase(BaseModel):
-    title : str
-    
-
-
+    title : str    
 class TodoCreate(TodoBase):
     pass
 
-
 class Todo(TodoBase):
-    id : int
-    owner_id  : int
+    id : str
+    owner_id  : str
 
     class Config:
         orm_mode = True
@@ -21,14 +17,11 @@ class UserBase(BaseModel):
     username: str
     email: str
     password: str
-
-
 class UserCreate(UserBase):
     pass 
 
-
 class User(UserBase):
-    id : int
+    id : str
     todos : list[Todo] = []
 
     class Config:

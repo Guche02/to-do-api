@@ -1,4 +1,4 @@
-from ..services.todo_services import create_todo_serive, update_todo_service, get_todo_service, get_user_todo_service
+from ..services.todo_services import create_todo_serive, update_todo_service, get_todo_service, get_user_todo_service,delete_todo_service
 from sqlalchemy.orm import Session
 
 async def create_todo_controller(user_id,todo,db:Session):
@@ -21,3 +21,8 @@ async def get_user_todo_controller(user_id,db):
     print(f"user's todos {todo}")
     return todo
 
+async def delete_todo_controller(todo_id,db):
+    message = await delete_todo_service(todo_id,db)
+    print(f"user's todos {message}")
+    return message
+   

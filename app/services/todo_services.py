@@ -72,5 +72,19 @@ async def get_user_todo_service(user_id: int, db: Session ):
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail="An error occurred while fetching todos for the user.")
-    
+
+async def delete_todo_service(todo_id: int, db: Session):
+    try:
+        todo = db.query(Todo).filter(Todo.id == todo_id).first()
+        if not todo:
+            raise HTTPException(status_code=404, detail="Todo not found.")
+        db.delete(todo)
+        db.commit()
+        return {"detail": f"Todo with ID {todo_id} has been successfully deleted."}
+
+    except Exception as e:
+        print(e)
+        db.rollback()
+        raise HTTPException(status_code=500, detail="An error occurred while deleting the todo.")
+
     

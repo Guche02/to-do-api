@@ -1,5 +1,5 @@
 from fastapi import APIRouter,Depends
-from ..controllers.todo_controller import create_todo_controller,update_todo_controller,get_todo_controller, get_user_todo_controller
+from ..controllers.todo_controller import create_todo_controller,update_todo_controller,get_todo_controller, get_user_todo_controller, delete_todo_controller
 from ..schemas.todo_schema import TodoCreate,TodoUpdate
 from ..database.db import SessionLocal
 from sqlalchemy.orm import Session
@@ -33,3 +33,8 @@ async def get_todo_route(db:Session= Depends(get_db)):
 async def get_user_todo(user_id:str,db:Session= Depends(get_db)):
     todo = await get_user_todo_controller(user_id,db)
     return todo
+
+@router.delete("/delete_todo/{todo_id}")
+async def delete_todo(todo_id:str, db: Session = Depends(get_db)):
+    message = await delete_todo_controller(todo_id,db)
+    return message

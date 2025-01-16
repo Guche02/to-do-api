@@ -24,6 +24,7 @@ class Todo(Base):
     __tablename__ = "Todo"
     id = Column(String(55), primary_key=True, default=lambda: str(uuid.uuid4())) 
     title = Column(String(255), index=True)
+    status = Column(bool,index=True)
     user_id = Column(String(55), ForeignKey("User.id"))
     owner = relationship("User",back_populates="todos")
     

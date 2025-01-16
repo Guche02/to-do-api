@@ -1,12 +1,9 @@
-
 from sqlalchemy.exc import IntegrityError
 from fastapi import HTTPException,Depends
-
 from ..models.models import User
-# from ..schemas.user_schema import 
 from sqlalchemy.orm import Session
 from ..database.db import SessionLocal
-from sqlalchemy.orm import Session
+
 
 def get_db():
     db = SessionLocal() 
@@ -31,8 +28,9 @@ async def create_user_service( user,db: Session):
         # print(db_user)
         return db_user
     except IntegrityError as e:
-        await db.rollback()
+        db.rollback()
         if 'email' in str(e.orig):
+            print(e.orig)
             raise HTTPException(
                 status_code= 400,
                 detail="Email is already in use."

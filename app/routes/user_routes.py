@@ -12,7 +12,7 @@ def get_db():
     finally:
         db.close()
         
-@router.post("/users/")
+@router.post("/register/")
 async def create_user_route(user: UserCreate ,db:Session=Depends(get_db)):
     print(user)
     user = await  create_user_controller(user,db)

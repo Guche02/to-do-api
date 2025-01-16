@@ -2,6 +2,9 @@ from pydantic import BaseModel, EmailStr
 
 class TodoBase(BaseModel):
     title : str    
+    
+class TodoUpdate(BaseModel):
+    status : bool    
  
 class TodoCreate(TodoBase):
     pass

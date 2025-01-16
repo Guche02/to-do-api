@@ -1,14 +1,11 @@
-from fastapi import FastAPI, Depends, HTTPException, status
-from sqlalchemy.orm import Session
-
-from .schemas import user_schema
-
+from fastapi import FastAPI
 from .models import models
 from .database.db import engine
-from pydantic import BaseModel
-from .services import user_servies
 from .routes.user_routes import router as user_router  
+from .routes.todo_routes import router as todo_router
+
 app = FastAPI()
+
 models.Base.metadata.create_all(bind=engine)
 
 import logging
@@ -24,3 +21,4 @@ def root():
    return {"message": "Hello World"}
 
 app.include_router(user_router)
+app.include_router(todo_router)

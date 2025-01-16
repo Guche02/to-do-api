@@ -11,8 +11,15 @@ from .routes.user_routes import router as user_router
 app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
 
+import logging
+import sys
+
+logger = logging.getLogger('uvicorn.error')
+logger.setLevel(logging.DEBUG)
+
 @app.get("/")
 def root():
+   logger.debug('this is a debug message')
    print("root route")
    return {"message": "Hello World"}
 

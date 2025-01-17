@@ -4,6 +4,7 @@ from ..database.db import Base
 import uuid
 from passlib.hash import bcrypt
 
+
 class User(Base):
     __tablename__ = 'User'
     id = Column(String(55), primary_key=True, default=lambda: str(uuid.uuid4())) 

@@ -4,6 +4,7 @@ from ..models.models import Todo
 from sqlalchemy.exc import IntegrityError
 from fastapi import HTTPException
 from .token_service import decode_token
+import jwt
 def get_db():
     db = SessionLocal() 
     try :    
@@ -27,6 +28,11 @@ async def create_todo_serive(user_token,todo,db:Session):
         db.rollback()
         print(e)
         raise HTTPException(status_code=400, detail="Database error ocurred.")
+    except jwt.PyJWTError as e:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid token"
+        )
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail="An unexpected error occured")
@@ -55,6 +61,11 @@ async def update_todo_service(user_token,task_id,todo,db:Session):
         db.rollback()
         print(e)
         raise HTTPException(status_code=400,detail="Database error occurred") 
+    except jwt.PyJWTError as e:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid token"
+        )
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail="An unexpected error occurred")   
@@ -90,7 +101,11 @@ async def delete_todo_service(user_token:str,todo_id: int, db: Session):
         db.delete(todo)
         db.commit()
         return {"detail": f"Todo with ID {todo_id} has been successfully deleted."}
-
+    except jwt.PyJWTError as e:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid token"
+        )
     except Exception as e:
         print(e)
         db.rollback()

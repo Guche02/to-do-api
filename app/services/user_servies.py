@@ -53,7 +53,8 @@ async def login_user_service(user, db:Session):
         
         if checkpw(user.password.encode('utf-8'), db_user._password.encode('utf-8')):
             print("Password verification passed")
-            access_token = create_access_token({"user_id":db_user.id,"email": db_user.email,"username":db_user.username})
+            access_token = create_access_token({"user_id":db_user.id,"email": db_user.email,
+                                                "username":db_user.username})
             print("Access token generated:", access_token)
             return {"access_token": access_token, "token_type": "bearer"}
         
@@ -66,4 +67,6 @@ async def login_user_service(user, db:Session):
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail="An unexpected error occured")
+             
+             
              

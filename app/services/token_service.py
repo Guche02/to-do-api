@@ -14,6 +14,7 @@ def create_access_token(data: dict):
     expires_delta = timedelta(minutes=int(ACCESS_TOKEN_EXPIRE_MINUTES))
     to_encode = data.copy()
     expire = datetime.utcnow() + expires_delta
+    print(expire)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     print("Encoded")
@@ -21,11 +22,23 @@ def create_access_token(data: dict):
 
 def decode_token(token: str):
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=ALGORITHM)
-        print(payload)
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+
+        if payload["exp"] < datetime.utcnow().timestamp():
+            print("manaual exp error caught")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Token has expired"
+            )
         return payload
-    except:
+    except jwt.ExpiredSignatureError:
+        print("Exp error caught")
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid Token"
+            status_code=401,
+            detail="Token has expired"
+        )
+    except jwt.PyJWTError as e:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid token"
         )

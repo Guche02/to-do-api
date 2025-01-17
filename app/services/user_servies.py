@@ -19,10 +19,11 @@ async def create_user_service( user,db: Session):
         print(f"servie {user}")
         db_user = User(
             username=user.username,
-            email=user.email,
-            password=user.password  
+            email=user.email,  
+            password = user.password
         )
-        # print(db_user)
+        # db_user.password = user.password
+        print(f"user db created {db_user}")
         db.add(db_user)
         # print(db_user)
         db.commit()

@@ -37,8 +37,4 @@ def decode_token(token: str):
             status_code=401,
             detail="Token has expired"
         )
-    except jwt.PyJWTError as e:
-        raise HTTPException(
-            status_code=401,
-            detail="Invalid token"
-        )
+ 

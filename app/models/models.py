@@ -2,6 +2,7 @@ from sqlalchemy import Boolean, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from ..database.db import Base
 import uuid
+from sqlalchemy import event
 from passlib.hash import bcrypt
 
 
@@ -10,16 +11,25 @@ class User(Base):
     id = Column(String(55), primary_key=True, default=lambda: str(uuid.uuid4())) 
     username= Column(String(255))
     email = Column(String(255), unique=True, index=True)
-    _password = Column("password", String(255), nullable=False)
+    # _password = Column("password", String(255), nullable=False)
+    password = Column(String(255), nullable=False)
     todos = relationship("Todo",back_populates="owner")
 
-    @property
-    def password(self):
-        raise AttributeError("Password is write-only")
+    # @property
+    # def password(self):
+    #     raise AttributeError("Password is write-only")
 
-    @password.setter
-    def password(self, raw_password):
-        self._password = bcrypt.hash(raw_password)
+    # @password.setter
+    # def password(self, raw_password):
+    #     self._password = bcrypt.hash(raw_password)
+        
+#encrypy password event
+def encrypt_password(mapper, connection, target):
+        target.password = bcrypt.hash(target.password)
+    
+#register events
+event.listen(User,'before_insert',encrypt_password)        
+            
     
 class Todo(Base):
     __tablename__ = "Todo"

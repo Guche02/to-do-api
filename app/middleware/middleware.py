@@ -7,8 +7,8 @@ from ..services.token_service import decode_token
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 open_route = "/open"  
 class ValidationMiddleware(BaseHTTPMiddleware):
-    async def dispatch( request: Request, call_next):
-        if any(request.url.path.startswith(open_route)):
+    async def dispatch(self, request: Request, call_next):
+        if request.url.path.startswith(open_route):
             return await call_next(request)
         try:
             token = await oauth2_scheme(request) 

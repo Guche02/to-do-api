@@ -14,13 +14,13 @@ def get_db():
     finally:
         db.close()
         
-@router.post("/register/")
+@router.post("/open/register/")
 async def create_user_route(user: UserCreate ,db:Session=Depends(get_db)):
     print(user)
     user = await  create_user_controller(user,db)
     return user
 
-@router.post("/login/")
+@router.post("/open/login/")
 async def login_user_route(user: UserLogin, db: Session=Depends(get_db)):
     token= await login_user_controller(user,db)
     return token

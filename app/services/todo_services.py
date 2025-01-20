@@ -5,12 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from fastapi import HTTPException
 from .token_service import decode_token
 import jwt
-def get_db():
-    db = SessionLocal() 
-    try :    
-        yield db
-    finally:
-        db.close()
+
         
 async def create_todo_serive(user_token,todo,db:Session):
     try:

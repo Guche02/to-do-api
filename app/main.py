@@ -3,6 +3,7 @@ from .models import models
 from .database.db import engine
 from .routes.user_routes import router as user_router  
 from .routes.todo_routes import router as todo_router
+from .middleware.middleware import ValidationMiddleware
 
 app = FastAPI()
 
@@ -22,3 +23,5 @@ def root():
 
 app.include_router(user_router)
 app.include_router(todo_router)
+
+app.add_middleware(ValidationMiddleware)

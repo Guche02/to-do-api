@@ -52,7 +52,7 @@ async def login_user_service(user, db:Session):
         if db_user is None:
             raise HTTPException(status_code=400, detail="User doesn't exist")
         
-        if checkpw(user.password.encode('utf-8'), db_user._password.encode('utf-8')):
+        if checkpw(user.password.encode('utf-8'), db_user.password.encode('utf-8')):
             print("Password verification passed")
             access_token = create_access_token({"user_id":db_user.id,"email": db_user.email,
                                                 "username":db_user.username})

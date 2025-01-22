@@ -2,6 +2,6 @@
 .env
 
 # Ignore the env directory (if it exists)
-env/
+myenv/
 
 __pycache__/
